@@ -1,0 +1,15 @@
+.todo {
+  &__prop {
+    &--check {
+      & input {
+        width: 25px;
+        height: 25px;
+      }
+    }
+    &--content {
+      &[status="completed"] {
+        text-decoration: line-through;
+      }
+    }
+  }
+}
