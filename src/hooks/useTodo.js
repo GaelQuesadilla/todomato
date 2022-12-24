@@ -1,14 +1,14 @@
 import { useEffect, useState, useRef } from "react";
 
 export const useTodo = (name) => {
-  const [todo, settodo] = useState([]);
+  const [todos, settodos] = useState([]);
   const firstRender = useRef(true);
   const storageName = useRef(name);
 
   const addTodo = () => {
     console.debug("CREATING TODO");
-    //! FIX THIS: settodo is called 2 times
-    settodo((prev) => {
+    //! FIX THIS: settodos is called 2 times
+    settodos((prev) => {
       let newValue = [...prev];
       const now = new Date();
       newValue.push({
@@ -24,19 +24,28 @@ export const useTodo = (name) => {
     });
   };
   const updateTodo = (id, newValues) => {
-    settodo((prev) => {
-      const index = prev.findIndex((todo) => todo.id === id);
+    settodos((prev) => {
+      const index = prev.findIndex((todos) => todos.id === id);
       prev[index] = Object.assign(prev[index], newValues);
       return [...prev];
     });
   };
 
   const deleteTodo = (id) => {
-    settodo((prev) => prev.filter((todo) => todo.id !== id));
+    settodos((prev) => prev.filter((todos) => todos.id !== id));
+  };
+
+  const getTodo = (id) => {
+    const todo = todos.filter((todos) => todos.id === id);
+    console.debug("opening todo", todo[0]);
+    if (todo.length === 0) {
+      return {};
+    }
+    return todo[0];
   };
 
   useEffect(() => {
-    settodo(JSON.parse(localStorage.getItem(storageName.current)));
+    settodos(JSON.parse(localStorage.getItem(storageName.current)));
     return () => {};
   }, []);
 
@@ -46,9 +55,9 @@ export const useTodo = (name) => {
         firstRender.current = false;
       };
     }
-    console.debug("Save render", todo);
-    localStorage.setItem(storageName.current, JSON.stringify(todo));
+    console.debug("Save render", todos);
+    localStorage.setItem(storageName.current, JSON.stringify(todos));
     return () => {};
-  }, [todo]);
-  return { todo, addTodo, updateTodo, deleteTodo };
+  }, [todos]);
+  return { todos, addTodo, updateTodo, deleteTodo, getTodo };
 };

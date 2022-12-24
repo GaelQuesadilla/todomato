@@ -1,9 +1,10 @@
-import { useRef } from "react";
-import { FormCheck, Col, Row } from "react-bootstrap";
+import { useRef, useState } from "react";
+import { FormCheck, Col, Row, Button } from "react-bootstrap";
 
 export const TodoElement = (props) => {
   const checkRef = useRef();
-  const { todo } = props;
+
+  const { todo, setModalShow, setOpenTodo } = props;
 
   return (
     <>
@@ -22,6 +23,10 @@ export const TodoElement = (props) => {
         <Col
           className="todo__prop--content"
           status={todo.checked ? "completed" : "unclompleted"}
+          onClick={() => {
+            setOpenTodo(todo.id);
+            setModalShow(true);
+          }}
         >
           <h3>{todo.header}</h3>
           <p>{todo.content}</p>
